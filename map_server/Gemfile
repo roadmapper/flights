@@ -38,4 +38,10 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 gem 'gmaps4rails'
-gem "mongoid", "~> 4.0.0"
+
+# MongoDB driver and BSON
+gem "mongoid"
+gem "bson_ext"
+
+# Rails API helper
+gem 'rails-api'
