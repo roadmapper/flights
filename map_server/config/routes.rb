@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
+  resources :flights, except: [:new, :edit]
   namespace :api do
     namespace :v1 do
-     resources :flight
+     resources :flights
     end
   end
   # get 'welcome/index'

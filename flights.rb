@@ -6,8 +6,8 @@ require 'mongo'
 include Mongo
 
 client = MongoClient.new("localhost", 27017)
-db = client['map_server_development']
-collection = db['planes']
+db = client[ARGV[0]]
+collection = db['flights']
 
 data = open("http://db8.flightradar24.com/zones/full_all.json").read
 data = JSON.parse(data)

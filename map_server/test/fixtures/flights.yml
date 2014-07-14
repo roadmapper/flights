@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  lat: 1.5
+  long: 1.5
+  altitude: MyString
+  speed: MyString
+  aircraft: MyString
+  registration: MyString
+  origin: MyString
+  destination: MyString
+  flightnum: MyString
+
+two:
+  lat: 1.5
+  long: 1.5
+  altitude: MyString
+  speed: MyString
+  aircraft: MyString
+  registration: MyString
+  origin: MyString
+  destination: MyString
+  flightnum: MyString
