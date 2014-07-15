@@ -2,8 +2,7 @@ class FlightsController < ApplicationController
   # GET /flights
   # GET /flights.json
   def index
-    @flights = Flight.all.first
-
+    @flights = Flight.all
     render json: @flights
   end
 
@@ -11,8 +10,22 @@ class FlightsController < ApplicationController
   # GET /flights/1.json
   def show
     @flight = Flight.find(params[:id])
-
     render json: @flight
+  end
+
+  def find_lat_long_data(lat, long, quantity)
+    point = [lat, long]
+    @flights = Flight.geo_near(point).max_distance(5).take(quantity)
+    
+  end
+
+  def find_lat_long
+    render json: find_lat_long_data(params[:lat].to_f, params[:long].to_f, params[:quantity].to_i)
+  end
+
+  def map
+    @flights = find_lat_long_data(38.964022,-77.378791, 5)
+    render "map"
   end
 
   # POST /flights

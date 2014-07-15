@@ -1,0 +1,47 @@
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0; padding: 0 }
+  #map-canvas { height: 50% }
+</style>
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDtYUYuYFNuOocw8X-xEUjD1a6sUduDDg">
+</script>
+<script type="text/javascript">
+ function initialize() {
+    
+    var mapOptions = {
+      center: new google.maps.LatLng(38.9639605, -77.379074),
+      zoom: 8
+    };
+    var map = new google.maps.Map(document.getElementById("map-canvas"),
+      mapOptions);
+    var marker = new google.maps.Marker({
+      position: new google.maps.LatLng(<%= @flights.first.location[0] %>, <%= @flights.first.location[1]%>),
+      map: map,
+      title:"<%= @flights.first.IATAflightnum %>"
+    });
+    var contentString = '<div id="content">'+
+      '<h1 id="firstHeading" class="firstHeading"><%= @flights.first.IATAflightnum %></h1>'+
+      '<div id="bodyContent">'+
+      '<p><%= @flights.first.origin + " -> " + @flights.first.destination %></p>'+
+      '</div>'+
+      '</div>';
+
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+      infowindow.open(map,marker);
+    });
+
+
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+<body>
+<h1>Map</h1>
+<p>Google</p>
+<div id="map-canvas"/><!-- style="width: 50%; height: 50%"></div>-->
+</body>
