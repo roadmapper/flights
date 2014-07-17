@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :flights, except: [:new, :edit]
   namespace :api do
     namespace :v1 do
+     get 'flights/find_lat_long'
      resources :flights
     end
   end

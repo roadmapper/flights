@@ -24,7 +24,7 @@ class FlightsController < ApplicationController
   end
 
   def map
-    @flights = find_lat_long_data(38.964022,-77.378791, 5)
+    @flights = find_lat_long_data(38.964022,-77.378791, 10)
     render "map"
   end
 

@@ -2,7 +2,7 @@
 <style type="text/css">
   html { height: 100% }
   body { height: 100%; margin: 0; padding: 0 }
-  #map-canvas { height: 50% }
+  #map-canvas { height: 75% }
 </style>
 <script type="text/javascript"
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDtYUYuYFNuOocw8X-xEUjD1a6sUduDDg">
@@ -12,6 +12,15 @@
   var aircraft_type_assignments={a380:["A388","A380","A389"],b747:"B741 B742 B743 B744 B74F B74S B748 BCLF BLCF".split(" "),a320:["A318","A319","A320","A321"],b737:"B731 B732 B733 B734 B735 B736 B737 B738 B739 E170 E190 A300 A30B A306 A310 SU95".split(" "),b777:["B772","B773","B77F","B77L","B77W"],b757:["B752","B753","T204","T214"],b767:["B762","B763","B764"],a330:"A332 A333 A359 B788 B789 A3ST".split(" "),a343:"A342 A343 IL76 IL86 IL96 K35R A124".split(" "),a346:["A345","A346"],rjx:"RJ1H RJ70 RJ85 B461 B462 B463 A148 A148 A158".split(" "),
 md11:["MD11","DC10"],helo:"A109 A139 A149 A189 AS32 AS3B AS50 AS55 AS65 B407 B412 B427 B429 B430 EC20 EC25 EC30 EC35 EC45 EC55 H269 R44 S61 S76 S92".split(" "),md80:"MD80 MD81 MD82 MD83 MD87 MD88 MD90 B712 B717 B722 CRJ CRJX CRJ1 CRJ2 CRJ7 CRJ9 DC91 DC93 DC95 E45X E135 E145 F70 F100 T154 YK42".split(" "),sb20:"SB20 SF34 AN26 ATP AT42 AT72 AT43 AT44 AT45 AT46 AT73 AT74 AT75 AT76 B190 B350 BE99 C130 CVLP CVLT D228 D328 DC3 DC3T DC6 DHC6 DHC7 DH8A DH8B DH8C DH8D E110 E120 F50 G159 JS31 JS32 JS41 SH33 SH36 SW4 J328 AC50 AC90 AC95 AEST BE10 BE20 BE30 BE50 BE55 BE56 BE58 BE60 BE65 BE76 BE80 BE95 BE96 BE9L BE9T C303 C310 C320 C340 C402 C404 C414 C421 C425 C441 C21T DA42 MU2 PA23 PA27 PA30 PA31 PA34 PA44 PA60 PAY1 PAY2 PAY3 PAY4 P34A P180 SW2 SW3".split(" "),
 lj45:"ASTR BE40 C500 C501 C510 C525 C25A C25B C25C C550 C551 C560 C56X C650 C680 C750 CL30 CL60 EA50 E50P E55P FA10 FA20 FA30 FA40 FA50 FA7X F900 F2TH GALX GLF2 GLF3 GLF4 GLF5 GL5T GLF6 GLEX G150 G200 G250 G280 HA4T H25B H25X H25C LJ25 LJ31 LJ35 LJ36 LJ40 LJ45 LJ55 LJ60 LJ85 LRJ MU30 PRM1 SBR1 SBR2 WW24".split(" "),c172:"AA5 AC11 BE23 BE24 BE33 BE35 BE36 C10T C42 C77R C82R C150 C152 C160 C162 C170 C172 C175 C177 C180 C182 C205 C206 C207 C208 C210 C337 COL3 COL4 DA40 DV20 EVOL FBA2 FDCT GA8 GLAS GP4 G58 G115 JAB4 KODI LNC2 LNC4 M20P M20T MO20 NAVI PA22 PA24 PA28 PA32 PA38 PA46 PC12 PC21 P28 P28A P28B P28R P32R P32T P46T P210 RV4 RV6 RV7 RV8 RV9 RV10 RV12 S208 SR20 SR22 TBM7 TBM8 TRIN Z42 WT9 GLID".split(" ")};
+
+  var reverseMap = {};
+  for (j in aircraft_type_assignments){
+    if (!Object.prototype.hasOwnProperty.call(aircraft_type_assignments, j)) continue
+      var types = aircraft_type_assignments[j];
+      for (var i = 0; i < types.length; i++){
+        reverseMap[types[i]] = j;
+      }
+  }
 
   var sprite_list={"small":{
 "default":{
@@ -72,16 +81,63 @@ lj45:"ASTR BE40 C500 C501 C510 C525 C25A C25B C25C C550 C551 C560 C56X C650 C680
 "180":[20,18,0,768,10,8],"195":[21,19,48,768,10,9],"210":[19,19,96,768,9,9],"225":[18,20,144,768,9,9],"240":[18,20,192,768,9,9],"255":[18,21,240,768,9,10],"270":[17,22,288,768,8,10],"285":[18,22,336,768,9,10],"300":[18,20,384,768,9,9],"315":[18,19,432,768,9,9],"330":[19,19,480,768,9,9],"345":[20,19,528,768,10,9],"0":[21,19,576,768,10,9],"15":[21,19,624,768,10,9],"30":[20,20,672,768,10,9],"45":[19,20,720,768,9,9],"60":[18,20,768,768,9,9],"75":[18,22,816,768,9,10],"90":[18,21,864,768,9,10],"105":[18,22,912,768,9,10],"120":[18,20,960,768,9,9],"135":[19,19,1008,768,9,9],"150":[20,19,1056,768,10,9],"165":[21,19,1104,768,10,9]},"lj45":{
 "180":[19,23,0,816,9,11],"195":[20,24,48,816,10,11],"210":[17,23,96,816,8,11],"225":[19,20,144,816,9,9],"240":[21,19,192,816,10,9],"255":[22,20,240,816,11,9],"270":[23,21,288,816,11,10],"285":[22,20,336,816,11,9],"300":[21,19,384,816,10,9],"315":[20,20,432,816,10,9],"330":[17,22,480,816,8,10],"345":[19,24,528,816,9,11],"0":[19,23,576,816,9,11],"15":[20,24,624,816,10,11],"30":[17,23,672,816,8,11],"45":[20,20,720,816,10,9],"60":[21,19,768,816,10,9],"75":[22,20,816,816,11,9],"90":[23,21,864,816,11,10],"105":[22,20,912,816,11,9],"120":[21,19,960,816,10,9],"135":[19,20,1008,816,9,9],"150":[17,22,1056,816,8,10],"165":[20,24,1104,816,10,11]}}};
 
-  
+  function round_to_15(a){
+    if(0==a)
+      return"unknown";
+    a=10*Math.round(a/10);
+    switch(a){
+      case 0:return 0;
+      case 10:return 15;
+      case 20:return 15;
+      case 30:return 30;
+      case 40:return 45;
+      case 50:return 45;
+      case 60:return 60;
+      case 70:return 75;
+      case 80:return 75;
+      case 90:return 90;
+      case 100:return 105;
+      case 110:return 105;
+      case 120:return 120;
+      case 130:return 135;
+      case 140:return 135;
+      case 150:return 150;
+      case 160:return 165;
+      case 170:return 165;
+      case 180:return 180;
+      case 190:return 195;
+      case 200:return 195;
+      case 210:return 210;
+      case 220:return 225;
+      case 230:return 225;
+      case 240:return 240;
+      case 250:return 255;
+      case 260:return 255;
+      case 270:return 270;
+      case 280:return 285;
+      case 290:return 285;
+      case 300:return 300;
+      case 310:return 315;
+      case 320:return 315;
+      case 330:return 330;
+      case 340:return 345;
+      case 350:return 345;
+      case 360:return 0;
+      default:return"unknown"
+    }
+  }
+var markers = [];
+    var infowindows = [];
 
  function initialize() {
     
     var flights = [];
     <% @flights.each do |flight| %>
-      //flights.push(["<%= flight.IATAflightnum %>", <%= flight.location[0].to_f %>, <%= flight.location[1].to_f %>])
       flights.push(<%= flight.to_json.html_safe %>);
     <% end %>
-    console.log(flights[0]);
+
+    
+
     var mapOptions = {
       center: new google.maps.LatLng(38.9639605, -77.379074),
       zoom: 8
@@ -89,57 +145,53 @@ lj45:"ASTR BE40 C500 C501 C510 C525 C25A C25B C25C C550 C551 C560 C56X C650 C680
     var map = new google.maps.Map(document.getElementById("map-canvas"),
       mapOptions);
 
-    
-
-    /*var marker = new google.maps.Marker({
-      position: new google.maps.LatLng(flights[0][1],flights[0][2]),
-      map: map,
-      title:flights[0][0]
-    });*/
-    
     setMarkers(map, flights)
-
-    
-
-
   }
   
+  var infowindow = new google.maps.InfoWindow;
+
   function setMarkers(map, flights) {
-    
-    
+      
     for (var i = 0; i < flights.length; i++){
       var flight = flights[i];
+      var aircraft = flight.aircraft;
+      var genericAircraftType = reverseMap[aircraft];
+      var roundedDirection = round_to_15(flight.aircraft_track);
+      var size = new google.maps.Size(sprite_list["large"][genericAircraftType][roundedDirection][0], sprite_list["large"][genericAircraftType][roundedDirection][1]);
+      var origin = new google.maps.Point(sprite_list["large"][genericAircraftType][roundedDirection][2], sprite_list["large"][genericAircraftType][roundedDirection][3]);
+      var anchor = new google.maps.Point(sprite_list["large"][genericAircraftType][roundedDirection][4], sprite_list["large"][genericAircraftType][roundedDirection][5]);
       var latlng = new google.maps.LatLng(flight.location[0],flight.location[1]);
       var image = {
         url: "/yellow_large.png",
-        
-        size: new google.maps.Size(27, 29),
-        
-        origin: new google.maps.Point(0,0),
-        
-        anchor: new google.maps.Point(0, 32)
+        //size: new google.maps.Size(27, 29),
+        size: size,
+        origin: origin,
+        anchor: anchor
       };
 
+      var contentString = '<div id="content">'+
+          '<h2 id="firstHeading" class="firstHeading">' + flight.IATAflightnum + '</h2>'+
+          '<div id="bodyContent">'+
+          '<p>' + flight.origin + '->' + flight.destination +'</p>'+
+          '</div>'+
+          '</div>';
       var marker = new google.maps.Marker({
           position: latlng,
           map: map,
           title:flight.IATAflightnum,
-          icon: image
+          icon: image,
+          content: contentString
       });
 
-      var contentString = '<div id="content">'+
-      '<h1 id="firstHeading" class="firstHeading">' + flight.IATAflightnum + '</h1>'+
-      '<div id="bodyContent">'+
-      '<p>' + flight.origin + '->' + flight.destination +'</p>'+
-      '</div>'+
-      '</div>';
+      
+      //console.log(contentString);
 
-      var infowindow = new google.maps.InfoWindow({
-        content: contentString
-      });
+      
 
       google.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map,marker);
+        
+        infowindow.setContent(this.content);
+        infowindow.open(map,this);
       });
 
     }
@@ -147,10 +199,9 @@ lj45:"ASTR BE40 C500 C501 C510 C525 C25A C25B C25C C550 C551 C560 C56X C650 C680
 
   google.maps.event.addDomListener(window, 'load', initialize);
 
-
   </script>
 <body>
 <h1>Map</h1>
 <p>Google</p>
-<div id="map-canvas"/><!-- style="width: 50%; height: 50%"></div>-->
+<div id="map-canvas"/>
 </body>
