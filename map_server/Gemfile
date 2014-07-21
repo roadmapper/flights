@@ -45,3 +45,6 @@ gem "bson_ext"
 
 # Rails API helper
 gem 'rails-api'
+
+# Running cron jobs
+gem 'whenever', :require => false
