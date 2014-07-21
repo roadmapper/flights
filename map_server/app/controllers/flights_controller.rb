@@ -1,4 +1,6 @@
 class FlightsController < ApplicationController
+  before_action :authenticate
+
   # GET /flights
   # GET /flights.json
   def index
@@ -59,5 +61,14 @@ class FlightsController < ApplicationController
     @flight.destroy
 
     head :no_content
+  end
+
+  private
+  def authenticate
+    
+    if (ApiKey.where(access_token: params[:token]).exists? == false)
+      render html: "HTTP Token: Unauthorized\n", status: 401
+    end 
+    
   end
 end
