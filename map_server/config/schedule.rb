@@ -1,5 +1,3 @@
-every 5.minutes do
-  command "echo 'lol_haha ' >> /tmp/lol.log"
-  #command "chromium-browser"
+every 2.minutes do
   command "/home/vinay/flights/updatedb.sh"
 end
