@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     namespace :v1 do
      get 'flights/find_lat_long'
      resources :flights
+     resources :airports, except: [:new, :edit]
     end
   end
   # get 'welcome/index'
