@@ -7,11 +7,11 @@ Deployment notes (Ubuntu 14.04):
 Uses Ruby 2.0.0p481 (rbenv instead of rvm), Rails 4.1.2, MongoDB 2.6
 
 When deploying:
- - need to add Whenever jobs to crontab (<code>bundle exec whenever --update-crontab map_server</code>)
- - create indexes for geo based queries (<code>rake db:mongoid:create_indexes</code>)
+ - need to add Whenever jobs to crontab (`bundle exec whenever --update-crontab map_server`)
+ - create indexes for geo based queries (`rake db:mongoid:create_indexes`)
 
 Ruby/Rails Installation
-<code>
+```bash
 sudo apt-get update
 sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties
 
@@ -39,4 +39,4 @@ gem install rails
 rbenv rehash
 
 rails -v
-</code>
+```
