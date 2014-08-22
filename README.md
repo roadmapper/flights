@@ -40,3 +40,4 @@ rbenv rehash
 
 rails -v
 ```
+Install mongo gem 1.8.3 for the flights.rb to work properly, may need to move the scraping/rehashing JSON logic into a Rails service for the future.
