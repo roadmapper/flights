@@ -48,3 +48,6 @@ gem 'rails-api'
 
 # Running cron jobs
 gem 'whenever', :require => false
+
+# Scheduler for jobs in ruby
+gem 'rufus-scheduler'
