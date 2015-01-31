@@ -30,6 +30,11 @@ class FlightsController < ApplicationController
     render "map"
   end
 
+  # GET /flights/test
+  def test
+    render "test"
+  end
+
   # POST /flights
   # POST /flights.json
   def create

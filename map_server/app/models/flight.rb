@@ -2,7 +2,7 @@ class Flight
   include Mongoid::Document
   field :location, :type => Array
   index(
-    {location: "2d"},{min: -200, max: 200, background: true}
+    {location: "2d"},{min: -200, max: 200}
   )
   field :flight_id, type: String
   field :altitude_ft, type: Integer

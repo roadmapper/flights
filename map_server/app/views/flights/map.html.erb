@@ -4,6 +4,9 @@
   body { height: 100%; margin: 0; padding: 0 }
   #map-canvas { height: 75% }
 </style>
+<%= stylesheet_link_tag 'application' %>
+<%= javascript_include_tag 'application' %>
+
 <script type="text/javascript"
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDtYUYuYFNuOocw8X-xEUjD1a6sUduDDg">
 </script>
@@ -130,7 +133,8 @@ var markers = [];
     var infowindows = [];
 
  function initialize() {
-    
+    console.log("initialized");
+    getLocation();
     var flights = [];
     <% @flights.each do |flight| %>
       flights.push(<%= flight.to_json.html_safe %>);
@@ -170,9 +174,10 @@ var markers = [];
       };
 
       var contentString = '<div id="content">'+
-          '<h2 id="firstHeading" class="firstHeading">' + flight.IATAflightnum + '</h2>'+
+          '<h3 id="firstHeading" class="firstHeading">' + flight.IATAflightnum + '</h3>'+
           '<div id="bodyContent">'+
           '<p>' + flight.origin + '->' + flight.destination +'</p>'+
+          '<p>' + flight.aircraft + ', alt:' + flight.altitude_ft + 'ft </p>'+
           '</div>'+
           '</div>';
       var marker = new google.maps.Marker({
@@ -199,9 +204,47 @@ var markers = [];
 
   google.maps.event.addDomListener(window, 'load', initialize);
 
+/*var tblock = function (e) {
+if (e.touches.length > 1) {
+    e.preventDefault()
+}
+
+return false;
+}
+*/
+document.body.addEventListener("touchmove", function(){}, true);
+
+/*google.maps.event.addListener(window, "touchmove", function(e){
+    return;
+});
+google.maps.event.addListener(window, "touchend", function(e){
+    return;
+});*/
+//document.getElementById("map-canvas").addEventListener("touchmove", function(){});
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        var pop = document.getElementById("popup");
+        pop.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+  var pop = document.getElementById("popup");
+
+  pop.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude;	
+  $('.error').fadeIn(400).delay(3000).fadeOut(400);
+}
+  
+
+
   </script>
 <body>
 <h1>Map</h1>
 <p>Google</p>
+<div id="popup" class="error" style='display:none'>testing</div>
 <div id="map-canvas"/>
 </body>
